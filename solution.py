@@ -24,9 +24,27 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
-
-    # Find all instances of naked twins
-    # Eliminate the naked twins as possibilities for their peers
+    # identify twins
+    for k,v in peers.items():
+        twins= ""
+        squares= units[k][2]
+        peers_vals= ["".join(sorted(values.get(val))) for val in v if (len(values.get(val))==2 and val in squares)]
+        while peers_vals:
+            popped= "".join(sorted(peers_vals.pop()))
+            if popped in peers_vals:
+                twins += popped
+    
+    # eliminate twins
+        if twins:
+            for box in squares:
+                digits = values[box]
+                if len(digits) > 1:
+                    for digit in digits:
+                        if ("".join(sorted(digits)) not in twins) and (digit in twins):
+                            assign_value(values, box, values[box].replace(twin_digit, ""))
+                           
+    
+    return 
 
 def cross(A, B):
     "Cross product of elements in A and elements in B."
@@ -94,6 +112,7 @@ def eliminate(values):
         digit = values[box]
         for peer in peers[box]:
             assign_value(values, peer, values[peer].replace(digit,''))
+    print(values)
     return values
 
 def only_choice(values):
@@ -115,11 +134,14 @@ def reduce_puzzle(values):
         # Check how many boxes have a determined value
         solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
 
-        # Your code here: Use the Eliminate Strategy
-        eliminate(values)
+        # Use the Eliminate Strategy
+        values= eliminate(values)
+        
+        # Use the Naked Twins Strategy
+        values= naked_twins(values)
 
-        # Your code here: Use the Only Choice Strategy
-        only_choice(values)
+        # Use the Only Choice Strategy
+        values= only_choice(values)
 
         # Check how many boxes have a determined value, to compare
         solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
@@ -163,6 +185,20 @@ def solve(grid):
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
 
+
+gg= {'I6': '4', 'H9': '3', 'I2': '6', 'E8': '1', 'H3': '5', 'H7': '8', 'I7': '1', 'I4': '8',
+                            'H5': '6', 'F9': '7', 'G7': '6', 'G6': '3', 'G5': '2', 'E1': '8', 'G3': '1', 'G2': '8',
+                            'G1': '7', 'I1': '23', 'C8': '5', 'I3': '23', 'E5': '347', 'I5': '5', 'C9': '1', 'G9': '5',
+                            'G8': '4', 'A1': '1', 'A3': '4', 'A2': '237', 'A5': '9', 'A4': '2357', 'A7': '27',
+                            'A6': '257', 'C3': '8', 'C2': '237', 'C1': '23', 'E6': '579', 'C7': '9', 'C6': '6',
+                            'C5': '37', 'C4': '4', 'I9': '9', 'D8': '8', 'I8': '7', 'E4': '6', 'D9': '6', 'H8': '2',
+                            'F6': '125', 'A9': '8', 'G4': '9', 'A8': '6', 'E7': '345', 'E3': '379', 'F1': '6',
+                            'F2': '4', 'F3': '23', 'F4': '1235', 'F5': '8', 'E2': '37', 'F7': '35', 'F8': '9',
+                            'D2': '1', 'H1': '4', 'H6': '17', 'H2': '9', 'H4': '17', 'D3': '2379', 'B4': '27',
+                            'B5': '1', 'B6': '8', 'B7': '27', 'E9': '2', 'B1': '9', 'B2': '5', 'B3': '6', 'D6': '279',
+                            'D7': '34', 'D4': '237', 'D5': '347', 'B8': '3', 'B9': '4', 'D1': '5'}
+print(gg)
+
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
     display(solve(diag_sudoku_grid))
@@ -175,3 +211,5 @@ if __name__ == '__main__':
         pass
     except:
         print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
+
+
