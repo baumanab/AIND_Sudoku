@@ -3,11 +3,17 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: Naked twins is a state where 2 grid boxes amongst peers contain the same digits. In this state we know that one of those two numbers must be the solution for each of the 2 grid boxes, and can't be the solutuion for any other peer of those grid boxes. We apply this contrain in the following manner:
+- Loop through units to find unsolved boxes and their corresponding values
+- Identify twins amongst unsolved boxes 
+- Identify members of each unit which contain digits in common with identified twins and retrieve their values
+- Eliminate those twin digits from the unit values.
+
+This routine is then addded to the search function which executes a depth first search and propogates constraints defined by eliminate, only_choice, and naked_twins.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+A: The key to solve diagonal Sudoku wiht constraint propogation is to define the diagonal units and add those units to the unitlist.  Since our contraint propogation functions (eliminate, only_choice, naked_twins) and search function operate on or below the unit list level, this makes these units part of the contraint propogation and search operations.
 
 ### Install
 
