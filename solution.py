@@ -1,4 +1,5 @@
 import random
+import collections
 
 rows = 'ABCDEFGHI'
 cols = '123456789'
@@ -16,6 +17,10 @@ def assign_value(values, box, value):
         assignments.append(values.copy())
     return values
 
+
+
+    
+    
 def naked_twins(values):
     """Eliminate values using the naked twins strategy.
     Args:
@@ -24,25 +29,29 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
-    for k,v in peers.items():
-        twins= []
-        # flat list of peers for box
-        boxes= [item for sublist in units[k] for item in sublist]
-        # extract values in peers of box
-        peers_vals= ["".join(sorted(values.get(val))) for val in v if len(values.get(val))==2]
-        # check for twins and add to twins list
-        while peers_vals:
-            popped= "".join(sorted(peers_vals.pop()))
-            if popped in peers_vals:
-                twins.append(popped)
-        twin_digits= [x for item in twins for x in item]
-    # eliminate twins
-        for box in boxes:
+    # loop through each unit, collect if unsolved, count unsolved intances, select twins
+    for unit in unitlist:
+        # collect unsolved to limit search
+        unsolved= [box for box in unit if len(values[box]) > 1] # collect
+        values_unsolved= [values[box] for box in unsolved] # get collected vals
+        # count
+        c= collections.Counter()
+        c.update(values_unsolved)
+    
+    # select twins
+        twins= [val for val in c.keys() if (c[val]== 2) and (len(val)==2)]
+        
+        # eliminate digits in twins from unsolved values
+        twin_digits= [x for item in twins for x in item] ## flatten twins
+    
+        for box in unsolved:
             digits = values[box]
             if len(digits) > 1:
                 for digit in digits:
                     if ("".join(sorted(digits)) not in twins) and (digit in twin_digits):
                         assign_value(values, box, values[box].replace(digit, ""))
+                      
+                        
     return values
 
 def cross(A, B):
@@ -56,7 +65,7 @@ row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
 diagonal_units = [[a + b for a, b in zip(list(rows), list(cols))], [a + b for a, b in zip(list(rows), list(cols[::-1]))]]
-unitlist = row_units + column_units + square_units
+unitlist = row_units + column_units + square_units + diagonal_units
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
 
