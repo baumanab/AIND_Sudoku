@@ -41,7 +41,7 @@ def naked_twins(values):
                 if len(digits) > 1:
                     for digit in digits:
                         if ("".join(sorted(digits)) not in twins) and (digit in twins):
-                            assign_value(values, box, values[box].replace(twin_digit, ""))
+                            assign_value(values, box, values[box].replace(digit, ""))
                            
     
     return 
