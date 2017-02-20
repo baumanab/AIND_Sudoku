@@ -33,9 +33,6 @@ def assign_value(values, box, value):
     return values
 
 
-
-    
-    
 def naked_twins(values):
     """Eliminate values using the naked twins strategy.
     Args:
@@ -121,8 +118,8 @@ def eliminate(values):
         digit = values[box]
         for peer in peers[box]:
             assign_value(values, peer, values[peer].replace(digit,''))
-    print(values)
     return values
+
 
 def only_choice(values):
     """
@@ -131,7 +128,7 @@ def only_choice(values):
     Output: The resulting sudoku in dictionary form.
     """
     for unit in unitlist:
-        for digit in '123456789':
+        for digit in cols:
             dplaces = [box for box in unit if digit in values[box]]
             if len(dplaces) == 1:
                 assign_value(values, dplaces[0], digit)
@@ -161,6 +158,8 @@ def reduce_puzzle(values):
             return False
     return values
 
+
+
 def search(values):
     "Using depth-first search and propagation, create a search tree and solve the sudoku."
     # First, reduce the puzzle using the previous function
@@ -184,6 +183,7 @@ def search(values):
         if attempt:
             return attempt
 
+
 def solve(grid):
     """
     Find the solution to a Sudoku grid.
@@ -193,6 +193,9 @@ def solve(grid):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
+    values = grid_values(grid)
+    values = search(values)
+    return values
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
@@ -206,6 +209,3 @@ if __name__ == '__main__':
         pass
     except:
         print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
-
-
-
