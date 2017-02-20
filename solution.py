@@ -35,13 +35,13 @@ def naked_twins(values):
             popped= "".join(sorted(peers_vals.pop()))
             if popped in peers_vals:
                 twins.append(popped)
-    
+        twin_digits= [x for item in twins for x in item]
     # eliminate twins
         for box in boxes:
             digits = values[box]
             if len(digits) > 1:
                 for digit in digits:
-                    if ("".join(sorted(digits)) not in twins) and (digit in twins):
+                    if ("".join(sorted(digits)) not in twins) and (digit in twin_digits):
                         assign_value(values, box, values[box].replace(digit, ""))
     return values
 
