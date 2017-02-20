@@ -13,7 +13,7 @@ This routine is then addded to the search function which executes a depth first 
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: The key to solve diagonal Sudoku wiht constraint propogation is to define the diagonal units and add those units to the unitlist.  Since our contraint propogation functions (eliminate, only_choice, naked_twins) and search function operate on or below the unit list level, this makes these units part of the contraint propogation and search operations.
+A: The key to solving diagonal Sudoku with constraint propogation is to define the diagonal units and add those units to the unitlist.  Since our contraint propogation functions (eliminate, only_choice, naked_twins) and search function operate on or below the unit list level, this makes these units part of the contraint propogation and search operations.
 
 ### Install
 
