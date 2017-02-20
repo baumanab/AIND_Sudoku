@@ -24,27 +24,26 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
-    # identify twins
     for k,v in peers.items():
-        twins= ""
-        squares= units[k][2]
-        peers_vals= ["".join(sorted(values.get(val))) for val in v if (len(values.get(val))==2 and val in squares)]
+        twins= []
+        # flat list of peers for box
+        boxes= [item for sublist in units[k] for item in sublist]
+        # extract values in peers of box
+        peers_vals= ["".join(sorted(values.get(val))) for val in v if len(values.get(val))==2]
+        # check for twins and add to twins list
         while peers_vals:
             popped= "".join(sorted(peers_vals.pop()))
             if popped in peers_vals:
-                twins += popped
+                twins.append(popped)
     
     # eliminate twins
-        if twins:
-            for box in squares:
-                digits = values[box]
-                if len(digits) > 1:
-                    for digit in digits:
-                        if ("".join(sorted(digits)) not in twins) and (digit in twins):
-                            assign_value(values, box, values[box].replace(digit, ""))
-                           
-    
-    return 
+        for box in boxes:
+            digits = values[box]
+            if len(digits) > 1:
+                for digit in digits:
+                    if ("".join(sorted(digits)) not in twins) and (digit in twins):
+                        assign_value(values, box, values[box].replace(digit, ""))
+    return values
 
 def cross(A, B):
     "Cross product of elements in A and elements in B."
